@@ -49,11 +49,18 @@ function Search() {
             const result = await searchService.search(debounced);
             setSearchResult(result);
 
-            setLoading(true);
+            setLoading(false);
         };
 
         fetchApi();
     }, [debounced]);
+
+    const handleChange = (e) => {
+        const searchValue = e.target.value;
+        if (!searchValue.startWith(' ' && searchValue.trim())) {
+            setSearchValue(e.target.value);
+        }
+    };
 
     return (
         <HeadlessTippy
@@ -77,7 +84,7 @@ function Search() {
                     value={searchValue}
                     placeholder="Search accounts and videos"
                     spellCheck={false}
-                    onChange={(e) => setSearchValue(e.target.value)}
+                    onChange={handleChange}
                     onFocus={() => setShowRes(true)}
                 />
 
@@ -95,7 +102,10 @@ function Search() {
                 )}
 
                 <button className={cx('search-btn')}>
-                    <FontAwesomeIcon icon={faMagnifyingGlass} />
+                    <FontAwesomeIcon
+                        icon={faMagnifyingGlass}
+                        onMouseDown={(e) => e.preventDefault()}
+                    />
                 </button>
             </div>
         </HeadlessTippy>
